@@ -25,7 +25,6 @@ public class StockStatsServiceImpl implements StockStatsService{
     @Autowired
     StockStatsRepository stockStatsRepository;
 
-    // Service Method to fetch Stock Stats by trade Code
     @Override
     public List<StockStats> getAllStocksByCode(String tradeCode) {
         List<StockStats> list = stockStatsRepository.findByCodeOrderByRecordDateTimeAsc(tradeCode);
@@ -47,7 +46,6 @@ public class StockStatsServiceImpl implements StockStatsService{
         return stockStatsRepository.findAll();
     }
 
-    // Service Method to Persist a List of Stock Stats
     @Override
     public void saveStock(List<StockStats> stockStats) {
         // Looping through the List of Stock stats and persisting in the DB
