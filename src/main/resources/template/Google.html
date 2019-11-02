@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Title</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script>
+        google.charts.load('current', {packages: ['corechart', 'line']});
+        google.charts.setOnLoadCallback(drawBasic);
+
+        function drawBasic() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'X');
+            data.addColumn('number', 'Dogs');
+
+            data.addRows([
+                [0, 0],   [1, 10],  [2, 23],  [3, 17],  [4, 18],  [5, 9],
+                [6, 11],  [7, 27],  [8, 33],  [9, 40],  [10, 32], [11, 35],
+                [12, 30], [13, 40], [14, 42], [15, 47], [16, 44], [17, 48],
+                [18, 52], [19, 54], [20, 42], [21, 55], [22, 56], [23, 57],
+                [24, 60], [25, 50], [26, 52], [27, 51], [28, 49], [29, 53],
+                [30, 55], [31, 60], [32, 61], [33, 59], [34, 62], [35, 65],
+                [36, 62], [37, 58], [38, 55], [39, 61], [40, 64], [41, 65],
+                [42, 63], [43, 66], [44, 67], [45, 69], [46, 69], [47, 70],
+                [48, 72], [49, 68], [50, 66], [51, 65], [52, 67], [53, 70],
+                [54, 71], [55, 72], [56, 73], [57, 75], [58, 70], [59, 68],
+                [60, 64], [61, 60], [62, 65], [63, 67], [64, 68], [65, 69],
+                [66, 70], [67, 72], [68, 75], [69, 80]
+            ]);
+
+            var options = {
+                theme:'material',
+                focusTarget:'category',
+                hAxis: {
+                    title: 'Time'
+                },
+                vAxis: {
+                    title: 'Popularity'
+                }
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+            chart.draw(data, options);
+        }
+    </script>
+
+    <style>
+        .row {
+            background: #f8f9fa;
+            margin-top: 20px;
+        }
+        .col {
+            padding: 10px;
+        }
+        .body {
+            font-family: arial,sans-serif;
+        }
+        .company-name  {
+            font-weight: 400;
+            font-size: 20px;
+            color: rgba(0,0,0,.62);
+        }
+        .company-subtitle {
+            font-weight: 400;
+            font-size: 16px;
+            color: rgba(0,0,0,.62);
+        }
+        .main-index {
+            font-size: 27px;
+            padding-right: 4px;
+            color: rgba(0,0,0,.87);
+        }
+        .sub-index {
+            font-size: 16px;
+            color: #0f9d58;
+        }
+        .country {
+            font-size: 16px;
+            color: rgba(0,0,0,.62);
+        }
+        .details {
+            font-size: 16px;
+            color: rgba(0,0,0,.62);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div>
+                <div>
+                    <span class="company-name">Alphabet Inc Class A</span>
+                </div>
+                <div>
+                    <span class="company-subtitle">NASDAQ:GOOGL</span>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <span class="main-index">1,259.11 <span class="sub-index"> <span class="country">USD</span> +1.48 (0.12%)</span></span>
+                </div>
+                <span class="details">Closed 24 Oct 7.58pm GMT-4</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div id="chart_div"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
