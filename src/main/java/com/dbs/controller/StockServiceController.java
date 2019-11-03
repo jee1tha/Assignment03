@@ -1,14 +1,15 @@
 package com.dbs.controller;
 
 import com.dbs.models.StockStats;
+import com.dbs.service.DriveQuickstart;
 import com.dbs.service.StockStatsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -17,9 +18,9 @@ public class StockServiceController {
     @Autowired
     private StockStatsService stockStatsService;
 
-    @RequestMapping(value = "/google",method = RequestMethod.GET)
-    public String hello(HttpServletRequest request, Model model){
-        List<StockStats> stockStats = stockStatsService.getAllStocksByCode("NASDAQ:GOOGL");
+    @RequestMapping(value = "/{company}",method = RequestMethod.GET)
+    public String hello(@PathVariable(value = "company") final String company, Model model) throws Exception    {
+        List<StockStats> stockStats = stockStatsService.getAllStocksByCode(company);
         model.addAttribute("stockstats",stockStats );
         model.addAttribute("code", stockStats.get(0).getCode());
         model.addAttribute("name", stockStats.get(0).getName());

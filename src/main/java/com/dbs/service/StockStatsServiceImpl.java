@@ -27,6 +27,16 @@ public class StockStatsServiceImpl implements StockStatsService{
 
     @Override
     public List<StockStats> getAllStocksByCode(String tradeCode) {
+        switch (tradeCode){
+            case "google" : tradeCode = "NASDAQ:GOOGL";
+                break;
+            case "apple" : tradeCode = "NASDAQ:APPL";
+                break;
+            case "fb" : tradeCode = "NASDAQ:FB";
+                break;
+
+
+        }
         List<StockStats> list = stockStatsRepository.findByCodeOrderByRecordDateTimeAsc(tradeCode);
         list.sort(Comparator.comparing(o -> o.getRecordDateTime()));
         return list;
