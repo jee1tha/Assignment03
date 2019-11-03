@@ -29,7 +29,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-
+/**
+ * The StockStatsService Implemnts StockStatsService
+ * This class has implementations related to handling the download and retrieval of Stock data
+ * @author  Jeewantha
+ */
 @Service
 public class StockStatsServiceImpl implements StockStatsService {
 

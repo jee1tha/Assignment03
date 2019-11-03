@@ -1,6 +1,5 @@
 package com.dbs.controller;
 
-import com.dbs.StockServiceApplication;
 import com.dbs.models.StockStats;
 import com.dbs.service.StockStatsService;
 import org.slf4j.Logger;
@@ -18,6 +17,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+/**
+ * This Controller retrieves data from the service layer and pass it on to the
+ * thymeleaf template
+ *
+ * @author  Jeewantha
+ */
 @Controller
 public class StockServiceController {
 
