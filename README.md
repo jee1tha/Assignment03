@@ -41,7 +41,7 @@ Cronjob will run every 3 days to archive records entered 3 days before.
 
 MongoLabs Connection String 
 
-mongodb+srv://root:root@dbs-assignment03-bbags.mongodb.net/test?retryWrites=true&w=majority
+mongodb+srv://root:<Password>@dbs-assignment03-bbags.mongodb.net/test?retryWrites=true&w=majority
 
 
 Logging
