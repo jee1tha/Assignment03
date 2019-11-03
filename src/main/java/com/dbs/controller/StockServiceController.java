@@ -1,25 +1,36 @@
 package com.dbs.controller;
 
+import com.dbs.StockServiceApplication;
 import com.dbs.models.StockStats;
 import com.dbs.service.StockStatsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @Controller
 public class StockServiceController {
 
+    private static final Logger LOG = LoggerFactory.getLogger(StockServiceController.class);
+
     @Autowired
     private StockStatsService stockStatsService;
 
-    @RequestMapping(value = "/google",method = RequestMethod.GET)
-    public String hello(HttpServletRequest request, Model model){
-        List<StockStats> stockStats = stockStatsService.getAllStocksByCode("NASDAQ:GOOGL");
+    @RequestMapping(value = "/{company}",method = RequestMethod.GET)
+    public String getStockDetails(@PathVariable(value = "company") final String company, Model model) throws Exception    {
+        LOG.info("[getStockDetails] --> for Company : " + company);
+
+        List<StockStats> stockStats = stockStatsService.getAllStocksByCode(company);
         model.addAttribute("stockstats",stockStats );
         model.addAttribute("code", stockStats.get(0).getCode());
         model.addAttribute("name", stockStats.get(0).getName());
@@ -31,9 +42,16 @@ public class StockServiceController {
                 stockStats.get(0).getPrice());
         model.addAttribute("change", String.format("%+.02f",priceChange));
         model.addAttribute("changepercentage",String.format("%.02f",getChangePercentage(priceChange,Float.parseFloat(stockStats.get(stockStats.size()-1).getPrice()))));
-        model.addAttribute("closed", stockStats.get(stockStats.size()-1).getRecordDateTime());
+        model.addAttribute("closed", datetoGMT(stockStats.get(stockStats.size()-1).getRecordDateTime()));
 
-        return "google";
+        return "stock";
+    }
+
+    private String datetoGMT(Date date){
+        // Create a DateFormat and set the timezone to GMT.
+        DateFormat df = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z");
+        df.setTimeZone(TimeZone.getTimeZone("GMT"));
+            return df.format(date);
     }
 
     private float getChange(String PriceFirst,String priceLast){
