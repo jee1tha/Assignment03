@@ -44,7 +44,7 @@ public class StockServiceController {
         model.addAttribute("changepercentage",String.format("%.02f",getChangePercentage(priceChange,Float.parseFloat(stockStats.get(stockStats.size()-1).getPrice()))));
         model.addAttribute("closed", datetoGMT(stockStats.get(stockStats.size()-1).getRecordDateTime()));
 
-        return "google";
+        return "stock";
     }
 
     private String datetoGMT(Date date){
