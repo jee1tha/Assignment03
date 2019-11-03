@@ -18,17 +18,17 @@ Apache POI version
 # IDE Used
 IntelliJ 
 
-How to use 
+# How to use 
 
-# Enable google API services - Google drive -> create a service account and provide necessary permission to access your google drive
-# Place stock record file named "assignment-trade.xlsx" inside google drive folder ( this can be changed from the application.yml )
-# Place Google service account p12 property file inside the resource folder named “credentialsp12.p12”.
-# Create directory /var/log/dbs/
-# Give write and read permission to directory /var/log/dbs/
-# Build cmd : mvn clean install 
-# Go to Target folder and run jar by running below command
-# java - jar target/stockservice-1.0-SNAPSHOT.jar  
-# Enter the following addresses in the browser to view the respective information,
+- Enable google API services - Google drive -> create a service account and provide necessary permission to access your google drive
+- Place stock record file named "assignment-trade.xlsx" inside google drive folder ( this can be changed from the application.yml )
+- Place Google service account p12 property file inside the resource folder named “credentialsp12.p12”.
+- Create directory /var/log/dbs/
+- Give write and read permission to directory /var/log/dbs/
+- Build cmd : mvn clean install 
+- Go to Target folder and run jar by running below command
+- java - jar target/stockservice-1.0-SNAPSHOT.jar  
+- Enter the following addresses in the browser to view the respective information,
  localhost:8080/fb - view stock records related to FB
  localhost:8080/google  - view stock records related to google
  localhost:8080/apple - view stock records related to apple
