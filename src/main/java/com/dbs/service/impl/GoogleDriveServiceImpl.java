@@ -39,28 +39,19 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 
 
+    /** Download file from google drive */
     public String downloadFile(){
         java.io.File xls = new java.io.File(filename);
         try {
                 httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-                // check for valid setup
-                if (serviceAccountEmail.startsWith("Enter ")) {
-                    System.err.println(serviceAccountEmail);
-                    System.exit(1);
-                }
-                String p12Content = Files.readFirstLine(new java.io.File(p12), Charset.defaultCharset());
-                if (p12Content.startsWith("Please")) {
-                    System.err.println(p12Content);
-                    System.exit(1);
-                }
-                // service account credential (uncomment setServiceAccountUser for domain-wide delegation)
+
+                // Creating google credential for service account
                 GoogleCredential credential = new GoogleCredential.Builder().setTransport(httpTransport)
                         .setJsonFactory(JSON_FACTORY)
                         .setServiceAccountId(serviceAccountEmail)
                         .setServiceAccountScopes(Collections.singleton(DriveScopes.DRIVE))
                         .setServiceAccountPrivateKeyFromP12File(new java.io.File(p12))
                         .build();
-
 
                 Drive service = new Drive.Builder(httpTransport, JSON_FACTORY, credential)
                         .setApplicationName(APPLICATION_NAME).build();
@@ -75,7 +66,6 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
                 files.forEach(file -> {
                     System.out.printf("%s (%s)\n", file.getName(), file.getId());
                     try {
-
                         if(file.getName().equals("assignment-trade.xlsx")){
                             service.files().get(file.getId())
                                     .executeMediaAndDownloadTo(outputStream);
@@ -87,8 +77,6 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
                         e.printStackTrace();
                     }
                 });
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }

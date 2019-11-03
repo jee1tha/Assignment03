@@ -1,7 +1,10 @@
 package com.dbs.controller;
 
+import com.dbs.StockServiceApplication;
 import com.dbs.models.StockStats;
 import com.dbs.service.StockStatsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -19,11 +21,15 @@ import java.util.TimeZone;
 @Controller
 public class StockServiceController {
 
+    private static final Logger LOG = LoggerFactory.getLogger(StockServiceController.class);
+
     @Autowired
     private StockStatsService stockStatsService;
 
     @RequestMapping(value = "/{company}",method = RequestMethod.GET)
-    public String hello(@PathVariable(value = "company") final String company, Model model) throws Exception    {
+    public String getStockDetails(@PathVariable(value = "company") final String company, Model model) throws Exception    {
+        LOG.info("[getStockDetails] --> for Company : " + company);
+
         List<StockStats> stockStats = stockStatsService.getAllStocksByCode(company);
         model.addAttribute("stockstats",stockStats );
         model.addAttribute("code", stockStats.get(0).getCode());

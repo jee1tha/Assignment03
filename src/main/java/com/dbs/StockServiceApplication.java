@@ -1,6 +1,5 @@
 package com.dbs;
 
-import com.dbs.service.cronjobs.CronJobs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -8,8 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.Environment;
 
 import javax.inject.Inject;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 @SpringBootApplication
 public class StockServiceApplication {
@@ -27,21 +24,6 @@ public class StockServiceApplication {
 
         SpringApplication app = new SpringApplication(StockServiceApplication.class);
         Environment env = app.run(args).getEnvironment();
-
-        String host = null;
-        try {
-            host = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException exception) {
-            LOG.error("Host not found : ", exception);
-        }
-
-        LOG.info("\n----------------------------------------------------------\n\t" +
-                        "Rainbow Application '{}' is running! Access URLs:\n\t" +
-                        "Local: \t\thttp://localhost:{}\n\t" +
-                        "External: \thttp://{}:{}\n----------------------------------------------------------",
-                env.getProperty("spring.application.name"),
-                env.getProperty("server.port"),
-                host,
-                env.getProperty("server.port"));
+        LOG.info("***** Application started *****");
     }
 }

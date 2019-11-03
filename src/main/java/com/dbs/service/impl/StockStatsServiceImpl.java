@@ -1,5 +1,6 @@
 package com.dbs.service.impl;
 
+import com.dbs.controller.StockServiceController;
 import com.dbs.models.StockStats;
 import com.dbs.repository.StockStatsRepository;
 import com.dbs.service.StockStatsService;
@@ -10,6 +11,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +33,8 @@ import java.util.Locale;
 @Service
 public class StockStatsServiceImpl implements StockStatsService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(StockStatsServiceImpl.class);
+
     @Autowired
     StockStatsRepository stockStatsRepository;
 
@@ -38,6 +43,7 @@ public class StockStatsServiceImpl implements StockStatsService {
 
     @Override
     public List<StockStats> getAllStocksByCode(String tradeCode) {
+        LOG.info("Get Stock records for Code : " + tradeCode);
         switch (tradeCode){
             case "google" : tradeCode = "NASDAQ:GOOGL";
                 break;
@@ -47,13 +53,17 @@ public class StockStatsServiceImpl implements StockStatsService {
                 break;
         }
         List<StockStats> list = stockStatsRepository.findByCodeOrderByRecordDateTimeAsc(tradeCode);
+        // Check if records have been updated today or whether there are no records
+        // Using the sorted last record of the list
        if(list.size() == 0 || !hasTodayStockUpdated(list.get(list.size()-1) )){
+           LOG.info("Updating stock records");
            saveStockStatsFromFile();
            return stockStatsRepository.findByCodeOrderByRecordDateTimeAsc(tradeCode);
        }
         return list;
     }
 
+    /**  method to check if the Stock record is up to date **/
     private boolean hasTodayStockUpdated(StockStats stockStat){
         DateTimeFormatter sdf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         Date latestRecordDate = stockStat.getRecordDateTime();
@@ -63,14 +73,14 @@ public class StockStatsServiceImpl implements StockStatsService {
        return date1.compareTo(date2) > 0 ;
     }
 
+    /** Downloading stock records file from Gdrive and updating Mongo DB **/
     @Override
     public void saveStockStatsFromFile() {
-
         List<StockStats> stockStats = readFromFile(googleDriveServiceImpl.downloadFile());
         saveStock(stockStats);
     }
 
-    // Service Method to fetch All Stock Stats from DB
+    /** Service Method to fetch All Stock Stats from DB **/
     @Override
     public List<StockStats> getAllStock() {
         return stockStatsRepository.findAll();
@@ -138,6 +148,7 @@ public class StockStatsServiceImpl implements StockStatsService {
         return stockStats;
     }
 
+    /** input a date String to get a java Date **/
     private Date getDateFromString(String dateStr) {
         Date date = null;
         try {

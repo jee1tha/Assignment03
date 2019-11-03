@@ -1,9 +1,9 @@
 package com.dbs.service.cronjobs;
 
+import com.dbs.models.StockStatsArchive;
+import com.dbs.repository.StockStatsArchiveRepository;
 import com.dbs.service.mapper.StockstatsMapper;
 import com.dbs.models.StockStats;
-import com.dbs.models.StockStatsArchieve;
-import com.dbs.repository.StockStatsArchieveRepository;
 import com.dbs.repository.StockStatsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,11 +26,12 @@ public class CronJobs {
     StockStatsRepository stockStatsRepository;
 
     @Autowired
-    StockStatsArchieveRepository archieveRepository;
+    StockStatsArchiveRepository archiveRepository;
 
     @Autowired
     StockstatsMapper stockstatsMapper;
 
+    /** Cron job scheduled for every 3 days to archive data older than 3 days **/
     @Scheduled(cron = "0 0 * 3 * *")
     public void housekeepOldrecords(){
 
@@ -45,10 +46,11 @@ public class CronJobs {
             List<StockStats> list = stockStatsRepository.getAllByRecordDateTimeBefore(date);
             LOG.info("Records 3 days older : " + list.size());
 
-            List<StockStatsArchieve> archieveList = stockstatsMapper.toArchieveList(list);
-            LOG.info("Archieve 3 days older : " + archieveList.size());
-
-            archieveList.forEach( record -> archieveRepository.save(record));
+            List<StockStatsArchive> archiveList = stockstatsMapper.toarchiveList(list);
+            LOG.info("archive 3 days older : " + archiveList.size());
+            // saving records to archive collection
+            archiveList.forEach( record -> archiveRepository.save(record));
+            // Deleting archived records from original collection
             deleteStockRecordsBeforeDate(date);
         }catch (Exception e){
             e.printStackTrace();
@@ -57,7 +59,7 @@ public class CronJobs {
 
     private void deleteStockRecordsBeforeDate(Date date){
         try{
-
+            LOG.info("Deleting old records");
             stockStatsRepository.deleteAllByRecordDateTimeBefore(date);
         }catch (Exception e){
             e.printStackTrace();
