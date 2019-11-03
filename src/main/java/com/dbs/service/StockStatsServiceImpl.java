@@ -10,7 +10,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +19,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -39,7 +39,6 @@ public class StockStatsServiceImpl implements StockStatsService{
 
     @Override
     public List<StockStats> getAllStocksByCode(String tradeCode) {
-        saveStockStatsFromFile();
         switch (tradeCode){
             case "google" : tradeCode = "NASDAQ:GOOGL";
                 break;
@@ -47,13 +46,22 @@ public class StockStatsServiceImpl implements StockStatsService{
                 break;
             case "fb" : tradeCode = "NASDAQ:FB";
                 break;
-
-
         }
         List<StockStats> list = stockStatsRepository.findByCodeOrderByRecordDateTimeAsc(tradeCode);
-        list.sort(Comparator.comparing(o -> o.getRecordDateTime()));
+       if(list.size() == 0 || !hasTodayStockUpdated(list.get(list.size()-1) )){
+           saveStockStatsFromFile();
+           return stockStatsRepository.findByCodeOrderByRecordDateTimeAsc(tradeCode);
+       }
         return list;
+    }
 
+    private boolean hasTodayStockUpdated(StockStats stockStat){
+        DateTimeFormatter sdf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        Date latestRecordDate = stockStat.getRecordDateTime();
+        Date todaye = new Date();
+        LocalDate date1= LocalDate.of(latestRecordDate.getYear(), latestRecordDate.getMonth(), latestRecordDate.getDate());
+        LocalDate date2 = LocalDate.of(todaye.getYear(), todaye.getMonth(), todaye.getDate());
+       return date1.compareTo(date2) > 0 ;
     }
 
     @Override
@@ -80,23 +88,13 @@ public class StockStatsServiceImpl implements StockStatsService{
 
     }
 
-    @Override
-    public void deleteStockByCodeAndRecordTime(String code, String record) {
-        stockStatsRepository.deleteByCodeAndAndRecordDateTime(code,record);
-    }
-
-    @Override
-    public void deleteAllStockStats() {
-        stockStatsRepository.deleteAll();
-    }
-
     private List<StockStats> readFromFile(String Path) {
         List<StockStats> stockStats = new ArrayList<>();
         try {
             FileInputStream excelFile = new FileInputStream(new File(Path));
             Workbook workbook = new XSSFWorkbook(excelFile);
             for(int i =0 ; i < workbook.getNumberOfSheets(); i++) {
-                Sheet datatypeSheet = workbook.getSheetAt(0);
+                Sheet datatypeSheet = workbook.getSheetAt(i);
                 Iterator<Row> iterator = datatypeSheet.iterator();
 
 

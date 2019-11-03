@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Collections;
@@ -27,30 +26,25 @@ public class GoogleDriveService {
 
     /** E-mail address of the service account. */
     @Value("${google.account}")
-    private String SERVICE_ACCOUNT_EMAIL ;
+    private String serviceAccountEmail;
+
+    @Value("${google.filename}")
+    private String filename;
 
     private static final String p12 = "/home/jee1tha/MyProjects/DBS/Assignment03/src/main/resources/credentialsp12.p12" ;
-    private static final String FILENAME = "assignment-trade.xlsx";
     private static HttpTransport httpTransport;
 
     /** Global instance of the JSON factory. */
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 
-/*
-
-    public static void main(String[] args) {
-        temp temp = new temp();
-        temp.downloadFile();
-    }
-*/
 
     public String downloadFile(){
-        java.io.File xls = new java.io.File(FILENAME);
+        java.io.File xls = new java.io.File(filename);
         try {
                 httpTransport = GoogleNetHttpTransport.newTrustedTransport();
                 // check for valid setup
-                if (SERVICE_ACCOUNT_EMAIL.startsWith("Enter ")) {
-                    System.err.println(SERVICE_ACCOUNT_EMAIL);
+                if (serviceAccountEmail.startsWith("Enter ")) {
+                    System.err.println(serviceAccountEmail);
                     System.exit(1);
                 }
                 String p12Content = Files.readFirstLine(new java.io.File(p12), Charset.defaultCharset());
@@ -61,7 +55,7 @@ public class GoogleDriveService {
                 // service account credential (uncomment setServiceAccountUser for domain-wide delegation)
                 GoogleCredential credential = new GoogleCredential.Builder().setTransport(httpTransport)
                         .setJsonFactory(JSON_FACTORY)
-                        .setServiceAccountId(SERVICE_ACCOUNT_EMAIL)
+                        .setServiceAccountId(serviceAccountEmail)
                         .setServiceAccountScopes(Collections.singleton(DriveScopes.DRIVE))
                         .setServiceAccountPrivateKeyFromP12File(new java.io.File(p12))
                         .build();

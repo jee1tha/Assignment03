@@ -1,10 +1,11 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://root:root@localhost:27017/assignment
+      uri: mongodb+srv://root:root@dbs-assignment03-bbags.mongodb.net/test?retryWrites=true&w=majority
 
   thymeleaf:
     cache: false
 
 google:
   account: "jeewanthsdbs@jeewanthadbs.iam.gserviceaccount.com"
+  filename: "assignment-trade.xlsx"
