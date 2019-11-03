@@ -10,19 +10,22 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
-import com.google.common.io.Files;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
 
 @Service
 public class GoogleDriveServiceImpl implements GoogleDriveService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(GoogleDriveServiceImpl.class);
+
     private static final String APPLICATION_NAME = "";
 
     /** E-mail address of the service account. */
@@ -41,6 +44,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
 
     /** Download file from google drive */
     public String downloadFile(){
+        LOG.info("------- Starting file download from Google drive -------");
         java.io.File xls = new java.io.File(filename);
         try {
                 httpTransport = GoogleNetHttpTransport.newTrustedTransport();
@@ -61,10 +65,11 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
                         .setFields("nextPageToken, files(id, name)")
                         .execute();
                 List<File> files = result.getFiles();
+                LOG.info("Files available : " + files.size());
                 OutputStream outputStream = new ByteArrayOutputStream();
 
                 files.forEach(file -> {
-                    System.out.printf("%s (%s)\n", file.getName(), file.getId());
+                        LOG.info("File Name : " + file.getName());
                     try {
                         if(file.getName().equals("assignment-trade.xlsx")){
                             service.files().get(file.getId())
@@ -80,6 +85,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        LOG.info("------- Finished file download from Google drive -------");
         return xls.getAbsolutePath();
     }
 }

@@ -6,17 +6,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.Environment;
 
-import javax.inject.Inject;
 
 @SpringBootApplication
 public class StockServiceApplication {
-
-    private final Environment env;
-
-    @Inject
-    public StockServiceApplication(Environment env) {
-        this.env = env;
-    }
 
     private static final Logger LOG = LoggerFactory.getLogger(StockServiceApplication.class);
 

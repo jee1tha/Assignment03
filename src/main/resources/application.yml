@@ -9,3 +9,7 @@ spring:
 google:
   account: "jeewanthsdbs@jeewanthadbs.iam.gserviceaccount.com"
   filename: "assignment-trade.xlsx"
+
+logging:
+  file: /var/log/dbs/dbs-service.log
+  level.*: info
