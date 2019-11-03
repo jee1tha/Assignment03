@@ -9,7 +9,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @Controller
 public class StockServiceController {
@@ -31,9 +36,16 @@ public class StockServiceController {
                 stockStats.get(0).getPrice());
         model.addAttribute("change", String.format("%+.02f",priceChange));
         model.addAttribute("changepercentage",String.format("%.02f",getChangePercentage(priceChange,Float.parseFloat(stockStats.get(stockStats.size()-1).getPrice()))));
-        model.addAttribute("closed", stockStats.get(stockStats.size()-1).getRecordDateTime());
+        model.addAttribute("closed", datetoGMT(stockStats.get(stockStats.size()-1).getRecordDateTime()));
 
         return "google";
+    }
+
+    private String datetoGMT(Date date){
+        // Create a DateFormat and set the timezone to GMT.
+        DateFormat df = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z");
+        df.setTimeZone(TimeZone.getTimeZone("GMT"));
+            return df.format(date);
     }
 
     private float getChange(String PriceFirst,String priceLast){
