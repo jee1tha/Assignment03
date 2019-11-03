@@ -1,4 +1,4 @@
-package com.dbs.mapper;
+package com.dbs.service.mapper;
 
 import com.dbs.models.StockStats;
 import com.dbs.models.StockStatsArchieve;

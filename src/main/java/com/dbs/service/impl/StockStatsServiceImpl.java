@@ -1,9 +1,8 @@
-package com.dbs.service;
+package com.dbs.service.impl;
 
 import com.dbs.models.StockStats;
 import com.dbs.repository.StockStatsRepository;
-import com.microsoft.schemas.office.visio.x2012.main.RowType;
-import org.apache.commons.codec.binary.StringUtils;
+import com.dbs.service.StockStatsService;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Cell;
@@ -29,13 +28,13 @@ import java.util.Locale;
 
 
 @Service
-public class StockStatsServiceImpl implements StockStatsService{
+public class StockStatsServiceImpl implements StockStatsService {
 
     @Autowired
     StockStatsRepository stockStatsRepository;
 
     @Autowired
-    GoogleDriveService googleDriveService;
+    GoogleDriveServiceImpl googleDriveServiceImpl;
 
     @Override
     public List<StockStats> getAllStocksByCode(String tradeCode) {
@@ -67,7 +66,7 @@ public class StockStatsServiceImpl implements StockStatsService{
     @Override
     public void saveStockStatsFromFile() {
 
-        List<StockStats> stockStats = readFromFile(googleDriveService.downloadFile());
+        List<StockStats> stockStats = readFromFile(googleDriveServiceImpl.downloadFile());
         saveStock(stockStats);
     }
 

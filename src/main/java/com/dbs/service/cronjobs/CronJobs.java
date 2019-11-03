@@ -1,7 +1,6 @@
-package com.dbs.cronjobs;
+package com.dbs.service.cronjobs;
 
-import com.dbs.StockServiceApplication;
-import com.dbs.mapper.StockstatsMapper;
+import com.dbs.service.mapper.StockstatsMapper;
 import com.dbs.models.StockStats;
 import com.dbs.models.StockStatsArchieve;
 import com.dbs.repository.StockStatsArchieveRepository;
