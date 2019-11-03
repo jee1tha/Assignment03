@@ -5,3 +5,6 @@ spring:
 
   thymeleaf:
     cache: false
+
+google:
+  account: "jeewanthsdbs@jeewanthadbs.iam.gserviceaccount.com"
